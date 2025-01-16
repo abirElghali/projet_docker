@@ -5,6 +5,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 require('dotenv').config()
 
+mongoose.set("strictQuery", false);
 
 
 const routerUsers = require('./routes/users.route')

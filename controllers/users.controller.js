@@ -33,7 +33,7 @@ const FindAllUsers = async (req, res) => {
 const FindSinglUser = async (req, res) => {
   try {
     const data = await Users.findOne({ _id: req.params.id });
-    res.status(201).json(data);
+    res.status(200).json(data);
   } catch (error) {
     console.log(error.message);
   }
@@ -50,7 +50,7 @@ const UpdateUser = async (req, res) => {
         req.body,
         { new: true }
       );
-      res.status(201).json(data);
+      res.status(200).json(data);
     }
   } catch (error) {
     console.log(error.message);
@@ -60,7 +60,7 @@ const UpdateUser = async (req, res) => {
 const DeleteUser = async (req, res) => {
   try {
     await Users.deleteOne({ _id: req.params.id });
-    res.status(201).json({ message: "User deleted with success" });
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.log(error.message);
   }

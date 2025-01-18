@@ -1,0 +1,51 @@
+stages:
+  - build
+  - test
+  - sonar
+  - integration
+
+# Déclencher le pipeline uniquement pour une demande de fusion
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# Étape 1 : Compilation et création de l'application
+build:
+  stage: build
+  script:
+    - echo "Compilation et création de l'application"
+    - ./build_script.sh  # Remplacez cela par la commande de build de votre projet
+  artifacts:
+    paths:
+      - build/
+
+# Étape 2 : Test unitaire
+unit_tests:
+  stage: test
+  script:
+    - echo "Exécution des tests unitaires"
+    - ./run_tests.sh  # Remplacez cela par la commande d'exécution de vos tests unitaires
+  dependencies:
+    - build
+
+# Étape 3 : SonarQube (facultatif)
+sonar_analysis:
+  stage: sonar
+  script:
+    - echo "Analyse avec SonarQube"
+    - sonar-scanner  # Remplacez cela par la commande SonarQube appropriée pour votre projet
+  only:
+    - merge_requests
+  dependencies:
+    - unit_tests
+
+# Étape 4 : Test d'intégration
+integration_tests:
+  stage: integration
+  script:
+    - echo "Exécution des tests d'intégration"
+    - ./integration_tests.sh  # Remplacez cela par la commande d'exécution de vos tests d'intégration
+  dependencies:
+    - build
+    - unit_tests
+    - sonar_analysis
